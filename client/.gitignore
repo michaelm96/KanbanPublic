@@ -1,0 +1,4 @@
+node_modules
+dist
+.cache
+vue-with-parcel
