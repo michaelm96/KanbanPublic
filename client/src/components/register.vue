@@ -4,18 +4,32 @@
       <div class="registerTitle">
         <h1>Register</h1>
       </div>
-      <form @submit.prevent="login">
+      <form @submit.prevent="register">
         <div class="input">
           <label for="first_name">First Name:</label>
         </div>
         <div class="fieldInput">
-          <input type="text" name="first_name" id="firstName" placeholder="Henry" v-model="first_name"/>
+          <input
+            type="text"
+            name="first_name"
+            id="firstName"
+            placeholder="Henry"
+            v-model="first_name"
+          />
+          <p class="errList">{{ errObj.first_name }}</p>
         </div>
         <div class="input">
           <label for="last_name">Last Name:</label>
         </div>
         <div class="fieldInput">
-          <input type="text" name="Last_name" id="LastName" placeholder="Arthur" v-model="last_name"/>
+          <input
+            type="text"
+            name="Last_name"
+            id="LastName"
+            placeholder="Arthur"
+            v-model="last_name"
+          />
+          <p class="errList">{{ errObj.last_name }}</p>
         </div>
         <div class="input">
           <label for="email">Email:</label>
@@ -28,6 +42,7 @@
             v-model="email"
             placeholder="HenryArthur@email.com"
           />
+          <p class="errList">{{ errObj.email }}</p>
         </div>
         <div class="input">
           <label for="password">Password:</label>
@@ -40,10 +55,11 @@
             v-model="password"
             placeholder="********"
           />
+          <p class="errList">{{ errObj.password }}</p>
         </div>
-        <br>
+        <br />
         <div class="goToLogin">
-          <a href="" @click.prevent="callLogin">Already have an account? Go to Login</a>
+          <a href @click.prevent="callRegis">Already have an account? Go to Login</a>
         </div>
         <button class="button" type="submit" value="submit">Register</button>
       </form>
@@ -63,12 +79,13 @@ export default {
       password: "",
       loginlogin: this.loggedIn,
       first_name: "",
-      last_name: ""
+      last_name: "",
+      errObj: {}
     };
   },
   methods: {
-    login() {
-        // console.log(this.first_name,this.last_name)
+    register() {
+      this.errObj = {};
       axios
         .post("http://localhost:3000/register", {
           first_name: this.first_name,
@@ -77,16 +94,15 @@ export default {
           password: this.password
         })
         .then(res => {
-          console.log(res.data);
           localStorage.setItem("access_token", res.data.access_token);
           this.loginlogin = true;
-          this.callLogin();
+          this.callRegis();
         })
         .catch(err => {
-          console.log(err);
+          this.errObj = err.response.data.message;
         });
     },
-    callLogin() {
+    callRegis() {
       this.$emit("regTrue", false);
     }
   }
@@ -157,15 +173,17 @@ input[type="text"] {
   margin: 0.5rem 6rem 0.5rem 6rem;
 }
 
-.passwordInput {
-  margin: 1rem 2rem 2rem 2rem;
-}
-
 .goToLogin {
   margin: 0rem 2rem 1.5rem 2rem;
 }
-.goToLogin a{
+.goToLogin a {
   text-decoration: none;
+  text-shadow: none;
+}
+
+.errList {
+  font-size: 10px;
+  color: brown;
   text-shadow: none;
 }
 </style>

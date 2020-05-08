@@ -1,10 +1,26 @@
 <template>
   <div>
     <navbar :loggedIn="loggedIn" @logging="loggedIn = $event" ref="childRef"></navbar>
-    <login v-if="!loggedIn && !registerForm" @regTrue="registerForm = $event" @logging="loggedIn = $event" :loggedIn="loggedIn"></login>
-    <register v-if="!loggedIn && registerForm" @regTrue="registerForm = $event" @logging="loggedIn = $event" :loggedIn="loggedIn"></register>
+    <login
+      v-if="!loggedIn && !registerForm"
+      @regTrue="registerForm = $event"
+      @logging="loggedIn = $event"
+      :loggedIn="loggedIn"
+    ></login>
+    <register
+      v-if="!loggedIn && registerForm"
+      @regTrue="registerForm = $event"
+      @logging="loggedIn = $event"
+      :loggedIn="loggedIn"
+    ></register>
+    <p class="errorMsg" v-if="isError">{{ errorMessage }}</p>
     <div class="container" id="kanbanBoard" v-if="loggedIn">
-      <board v-for="(board, index) in boardsList" :key="index" :board="board"></board>
+      <board 
+        v-for="(board, index) in boardsList" 
+        :key="index" 
+        :board="board"
+        @sendErr="errMsg = $event, errorToggler()"
+      ></board>
     </div>
     <p class="credit">Photo by Thomas Langnes on Unsplash</p>
   </div>
@@ -23,8 +39,11 @@ export default {
   data() {
     return {
       loggedIn: true,
-      registerForm:false,
-      loginForm:true,
+      registerForm: false,
+      loginForm: true,
+      errMsg: '',
+      isError: false,
+      errorMessage: '',
       boardsList: [
         {
           name: "Backlog",
@@ -59,7 +78,6 @@ export default {
           }
         })
         .then(datas => {
-          console.log(datas.data);
           for (let arr of this.boardsList) {
             arr.data = [];
             for (let data of datas.data) {
@@ -68,12 +86,14 @@ export default {
               }
             }
           }
-          console.log(this.boardsList);
           this.$refs.childRef.login();
         })
         .catch(err => {
-          console.log(err);
+          console.log(err.response.data);
         });
+    },
+    errorToggler(){
+      this.isError = true
     }
   },
   components: {
@@ -89,6 +109,20 @@ export default {
     } else {
       this.loggedIn = false;
     }
+  },
+  watch:{
+    isError(newVal,oldVal){
+      if(newVal) this.errorMessage = this.errMsg
+      if(oldVal) this.errorMessage = 'Ini oldVal'
+    },
+    errorMessage(newVal){
+      if(newVal){
+        setTimeout(()=>{
+          this.errorMessage = '',
+          this.isError = false
+        }, 2000)
+      }
+    }
   }
 };
 </script>
@@ -101,10 +135,18 @@ export default {
   grid-gap: 4rem;
   margin: 1rem;
 }
-.credit{
+.credit {
   color: aliceblue;
   position: fixed;
   bottom: 0;
-  left: 0; 
+  left: 0;
+}
+.errorMsg{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Fredoka One", cursive;
+  margin: 1rem;
+  background-color: red;
 }
 </style>

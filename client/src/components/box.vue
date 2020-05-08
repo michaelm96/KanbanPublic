@@ -4,7 +4,7 @@
       <p>{{ card.title }}</p>
       <div class="date">
         <p>By: {{ by }}</p>
-        <p>{{ new Date(card.createdAt).toDateString().slice(4) }}</p>
+        <p>{{ new Date(card.createdAt).toDateString().slice(4).split(" ").join("-") }}</p>
       </div>
       <div class="right">
         <i class="fas fa-arrows-alt move icon" @click="move"></i>
@@ -38,7 +38,6 @@ export default {
   methods: {
     deleteTask() {
       const access_token = localStorage.getItem("access_token");
-      //   console.log(this.card.id)
       axios({
         method: "Delete",
         url: `http://localhost:3000/task/${this.card.id}`,
@@ -47,15 +46,13 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.$parent.$parent.getData();
         })
         .catch(err => {
-          console.log(err);
+					this.$emit("errMessage", err.response.data.message)
         });
     },
     editTask() {
-      console.log(this.title);
       const access_token = localStorage.getItem("access_token");
       const { id } = this.card;
       axios({
@@ -74,7 +71,7 @@ export default {
           this.category = "";
         })
         .catch(err => {
-          console.log(err);
+					this.$emit("errMessage", err.response.data.message)
         });
     },
     move() {
@@ -109,6 +106,7 @@ export default {
   font-weight: 100;
   border-radius: 8px;
 	background-color: snow;
+	font-family: 'Acme', sans-serif;
 }
 
 p {

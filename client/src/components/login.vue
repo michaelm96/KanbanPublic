@@ -4,6 +4,7 @@
       <div class="loginTitle">
         <h1>Login</h1>
       </div>
+      <p class="invalid">{{ errMessage }}</p>
       <form @submit.prevent="login">
         <div class="input">
           <label for="email">Email:</label>
@@ -28,10 +29,10 @@
             v-model="password"
             placeholder="********"
           />
-          <br>
+          <br />
         </div>
         <div class="goToRegister">
-          <a href="" @click.prevent="callRegis" style="color: red">Don't have account yet? register</a>
+          <a href @click.prevent="callRegis" style="color: red">Don't have account yet? register</a>
         </div>
         <button class="button" type="submit" value="submit">Login</button>
       </form>
@@ -48,7 +49,8 @@ export default {
     return {
       email: "",
       password: "",
-      loginlogin: this.loggedIn
+      loginlogin: this.loggedIn,
+      errMessage: ""
     };
   },
   methods: {
@@ -59,18 +61,17 @@ export default {
           password: this.password
         })
         .then(res => {
-          console.log(res.data);
           localStorage.setItem("access_token", res.data.access_token);
           this.loginlogin = true;
           this.$parent.getData();
           this.$emit("logging", this.loginlogin);
         })
         .catch(err => {
-          console.log(err);
+          this.errMessage = err.response.data.message;
         });
     },
-    callRegis(){
-      this.$emit("regTrue", true)
+    callRegis() {
+      this.$emit("regTrue", true);
     }
   }
 };
@@ -134,12 +135,19 @@ input[type="password"] {
 }
 .fieldInput {
   margin: 1rem 6rem 2rem 6rem;
+  background-color: transparent;
 }
 
-.goToRegister{
+.goToRegister {
   margin: 1rem 4rem 5rem 4rem;
 }
-.goToRegister a{
+.goToRegister a {
   text-decoration: none;
+}
+
+.invalid {
+  margin-left: 5rem;
+  color: brown;
+  text-shadow: none;
 }
 </style>

@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Email should not empty'
         },
         isEmail: {
-          msg: 'Not email form'
+          msg: 'Not email form type'
         },
       },
       unique:{

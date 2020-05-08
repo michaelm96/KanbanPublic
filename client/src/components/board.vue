@@ -2,7 +2,7 @@
   <div class="board">
     <div :class="board.id" class="title">{{ board.name }}</div>
     <div class="taskBoard">
-      <box v-for="(card, index) in board.data" :key="index" :card="card"></box>
+      <box v-for="(card, index) in board.data" :key="index" :card="card" @errMessage="err=$event, sendErr()"></box>
     </div>
     <form class="boxSizing">
       <textarea
@@ -23,11 +23,13 @@ import box from "../components/box";
 import axios from "axios"
 
 export default {
+  name: "board",
   props: ["board"],
   data() {
     return {
       rowSize: 1,
-      textField: ""
+      textField: "",
+      err: ""
     };
   },
   components: {
@@ -57,14 +59,16 @@ export default {
         },  
       })
       .then(data => {
-        console.log(data)
         this.textField = ""
         this.rowSize = 1
         this.$parent.getData()
       })
       .catch(err => {
-        console.log(err)
+        this.$emit("sendErr", err.response.data.message)
       })
+    },
+    sendErr(){
+      this.$emit("sendErr", this.err)
     }
   }
 };
