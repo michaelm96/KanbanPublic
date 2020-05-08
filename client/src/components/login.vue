@@ -34,14 +34,21 @@
         <div class="goToRegister">
           <a href @click.prevent="callRegis" style="color: red">Don't have account yet? register</a>
         </div>
-        <button class="button" type="submit" value="submit">Login</button>
+        <div class="loginButton">
+          <button class="button" type="submit" value="submit">Login</button>
+        </div>
       </form>
+      <div class="centering">
+        <p>OR</p>
+        <google></google>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import google from "./googleSignIn";
 
 export default {
   props: ["loggedIn"],
@@ -56,7 +63,7 @@ export default {
   methods: {
     login() {
       axios
-        .post("http://localhost:3000/login", {
+        .post("https://kanban-h8.herokuapp.com/login", {
           email: this.email,
           password: this.password
         })
@@ -73,6 +80,9 @@ export default {
     callRegis() {
       this.$emit("regTrue", true);
     }
+  },
+  components: {
+    google
   }
 };
 </script>
@@ -96,6 +106,7 @@ export default {
   justify-content: center;
   align-content: center;
   margin: 0 5rem 3rem 5rem;
+  text-shadow: 2px 2px black;
 }
 input[type="email"],
 input[type="password"] {
@@ -117,7 +128,7 @@ input[type="password"] {
   background-color: #006ecf;
   border: none;
   border-radius: 15px;
-  margin: 0 auto;
+  margin: 0 0 0 6rem;
 }
 
 .button:hover {
@@ -139,7 +150,7 @@ input[type="password"] {
 }
 
 .goToRegister {
-  margin: 1rem 4rem 5rem 4rem;
+  margin: 1rem 4rem 2rem 4rem;
 }
 .goToRegister a {
   text-decoration: none;
@@ -149,5 +160,23 @@ input[type="password"] {
   margin-left: 5rem;
   color: brown;
   text-shadow: none;
+}
+
+.centering {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.centering p {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 2rem;
+  text-shadow: 2px 2px black;
+}
+
+.loginButton{
+  margin: 0px 0px 0px 2rem;
 }
 </style>

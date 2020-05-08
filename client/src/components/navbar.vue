@@ -2,10 +2,10 @@
   <nav class="navContainer">
     <h3 class="kanban">Kanban</h3>
     <ul class="navBar">
-        <li class="logButton" @click.prevent="login(true)" v-if="loggedInNav">
-            Logout
-            <i class="fas fa-sign-out-alt"></i>
-        </li>
+      <li class="logButton" @click.prevent="login(true), signOut()" v-if="loggedInNav">
+        Logout
+        <i class="fas fa-sign-out-alt"></i>
+      </li>
     </ul>
   </nav>
 </template>
@@ -13,21 +13,27 @@
 <script>
 export default {
   props: ["loggedIn"],
-  data(){
-      return{
-          loggedInNav : this.loggedIn,
-      }
+  data() {
+    return {
+      loggedInNav: this.loggedIn
+    };
   },
-  methods:{
-      login(status){
-          if(status){
-              localStorage.removeItem('access_token')
-              this.loggedInNav = false
-          }else{
-              this.loggedInNav = true
-          }
-          this.$emit('logging', this.loggedInNav)
+  methods: {
+    login(status) {
+      if (status) {
+        localStorage.removeItem("access_token");
+        this.loggedInNav = false;
+      } else {
+        this.loggedInNav = true;
       }
+      this.$emit("logging", this.loggedInNav);
+    },
+    signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function() {
+        console.log("User signed out.");
+      });
+    }
   }
 };
 </script>
@@ -60,7 +66,7 @@ export default {
   font-family: "Fredoka One", cursive;
   color: blueviolet;
 }
-.logButton{
+.logButton {
   padding-bottom: 1rem;
 }
 </style>

@@ -32,7 +32,7 @@ export default {
       editPressed: false,
       category: this.card.category,
       title: this.card.title,
-      by: this.card.User.first_name + this.card.User.last_name
+      by: `${this.card.User.first_name} ${this.card.User.last_name}`
     };
   },
   methods: {
@@ -40,7 +40,7 @@ export default {
       const access_token = localStorage.getItem("access_token");
       axios({
         method: "Delete",
-        url: `http://localhost:3000/task/${this.card.id}`,
+        url: `https://kanban-h8.herokuapp.com/task/${this.card.id}`,
         headers: {
           access_token: this.access_token
         }
@@ -57,7 +57,7 @@ export default {
       const { id } = this.card;
       axios({
         method: "PUT",
-        url: `http://localhost:3000/task/${id}`,
+        url: `https://kanban-h8.herokuapp.com/task/${id}`,
         headers: {
           access_token
         },

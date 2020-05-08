@@ -72,7 +72,7 @@ export default {
     getData() {
       const access_token = localStorage.getItem("access_token");
       axios
-        .get("http://localhost:3000/task", {
+        .get("https://kanban-h8.herokuapp.com/task", {
           headers: {
             access_token
           }

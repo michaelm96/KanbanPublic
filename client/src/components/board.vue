@@ -49,7 +49,7 @@ export default {
       const category = this.board.name
       return axios({
         method : "POST",
-        url : "http://localhost:3000/task",
+        url : "https://kanban-h8.herokuapp.com/task",
         headers : {
           access_token
         },
