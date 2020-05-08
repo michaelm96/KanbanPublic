@@ -101,7 +101,7 @@ _Response (500 - Internal Server Error)_
 
 ### GET /task
 
-> Get all toDo-List
+> Get all task
 
 _Request Header_
 ```
@@ -155,7 +155,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-### GET /todos /:id
+### GET /task /:id
 
 > Find Task by id
 
@@ -207,7 +207,7 @@ _Response (500 - Internal Server Error)_
   "message": "<returned error message>"
 }
 ```
-### POST /todos
+### POST /task
 
 > Create new task
 
