@@ -22,7 +22,6 @@ class UserController{
 
     static login(req,res,next){
         const { email,password } = req.body
-        console.log(req.body);
         const error = {status: 400, message: 'Invalid email/password'}
 
         User.findOne({
@@ -34,7 +33,7 @@ class UserController{
             }else{
                 const access_token = generateToken(user)
                 req.headers = access_token
-                res.status(200).json({ access_token })
+                res.status(201).json({ access_token })
             }
         })
         .catch(err =>{

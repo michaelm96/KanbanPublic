@@ -3,8 +3,7 @@ const { User } = require('../models')
 
 class TaskController {
     static readTask(req, res, next) {
-        const { id } = req.userData
-        console.log("apa aja");
+        // const { id } = req.userData
         Task.findAll({
             include: [{model:User}]
         })
@@ -16,7 +15,6 @@ class TaskController {
                 }
             })
             .catch(err => {
-                console.log(err);
                 next(err)
             })
     }
